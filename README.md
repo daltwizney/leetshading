@@ -1,0 +1,1 @@
+this is where I play with GLSL shaders for visual comparison with kollie
