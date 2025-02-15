@@ -1,7 +1,9 @@
-out vec2 uvCoords;
+out vec2 v_uv;
+out vec3 v_position;
 
 void main() {
 
-    uvCoords = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position * 0.5, 1.0);
+    v_uv = uv;
+    v_position = position;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }

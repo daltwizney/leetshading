@@ -3,10 +3,12 @@ import * as THREE from 'three';
 import App from './src/app';
 
 import vshader from './src/shaders/projection.vert?raw';
-import fshader from './src/shaders/varyings.frag?raw';
+import fshader from './src/shaders/texture.frag?raw';
+
+import textureUrl from './assets/textures/kollie-logo-v2.png';
 
 // scene, camera, renderer
-const canvasWidth = 800;
+const canvasWidth = 600;
 const canvasHeight = 600;
 
 const app = new App(canvasWidth, canvasHeight);
@@ -17,6 +19,9 @@ const clock = new THREE.Clock();
 
 // uniforms
 const uniforms = {
+    u_tex: {
+        value: new THREE.TextureLoader().load(textureUrl)
+    },
     u_time: { value: 0.0 },
     u_mouse: { value: { x: 0.0, y: 0.0 } },
     u_resolution: { value: { x: canvasWidth, y: canvasHeight } },
@@ -24,7 +29,7 @@ const uniforms = {
 };
 
 // geometry
-const geometry = new THREE.PlaneGeometry(4, 4);
+const geometry = new THREE.PlaneGeometry(2, 2);
 
 const material = new THREE.ShaderMaterial({
     glslVersion: THREE.GLSL3,
