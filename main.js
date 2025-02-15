@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+import App from './src/app';
+
 import vshader from './src/shaders/projection.vert?raw';
 import fshader from './src/shaders/varyings.frag?raw';
 
@@ -7,14 +9,9 @@ import fshader from './src/shaders/varyings.frag?raw';
 const canvasWidth = 800;
 const canvasHeight = 600;
 
-const scene = new THREE.Scene();
-const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+const app = new App(canvasWidth, canvasHeight);
 
-camera.position.z = 1;
-
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( canvasWidth, canvasHeight );
-document.body.appendChild( renderer.domElement );
+app.currentScene = new THREE.Scene();
 
 const clock = new THREE.Clock();
 
@@ -38,30 +35,20 @@ const material = new THREE.ShaderMaterial({
 
 const plane = new THREE.Mesh(geometry, material);
 
-scene.add(plane);
+app.currentScene.add(plane);
 
 // event-handlers
-function move(e) {
+app.events.on('mouseMove', (e) => {
 
     uniforms.u_mouse.value.x = (e.touches) ? 
         e.touches[0].clientX : e.clientX;
 
     uniforms.u_mouse.value.y = (e.touches) ?
         e.touches[0].clientY : e.clientY;
-}
-
-if ('ontouchstart' in window) {
-    document.addEventListener('touchmove', move);
-} else {
-    document.addEventListener('mousemove', move);
-}
+});
 
 // render loop
-function animate() {
+app.events.on('update', () => {
 
     uniforms.u_time.value = clock.getElapsedTime();
-
-	renderer.render( scene, camera );
-}
-
-renderer.setAnimationLoop( animate );
+});

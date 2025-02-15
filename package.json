@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "serve":"npx vite"
+    "serve": "npx vite"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "events": "^3.3.0",
     "three": "^0.173.0"
   },
   "devDependencies": {
