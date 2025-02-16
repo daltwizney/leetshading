@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import App from './src/app';
 
 import vshader from './src/shaders/projection.vert?raw';
-import fshader from './src/shaders/texture.frag?raw';
+import fshader from './src/shaders/rotating_texture.frag?raw';
 
 import textureUrl from './assets/textures/kollie-logo-v2.png';
 
