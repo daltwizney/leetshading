@@ -2,8 +2,8 @@ import * as THREE from 'three';
 
 import App from './src/app';
 
-import vshader from './src/shaders/projection.vert?raw';
-import fshader from './src/shaders/rotating_texture.frag?raw';
+import vshader from './src/shaders/box_sphere.vert?raw';
+import fshader from './src/shaders/box_sphere.frag?raw';
 
 import textureUrl from './assets/textures/kollie-logo-v2.png';
 
@@ -11,7 +11,7 @@ import textureUrl from './assets/textures/kollie-logo-v2.png';
 const canvasWidth = 600;
 const canvasHeight = 600;
 
-const app = new App(canvasWidth, canvasHeight);
+const app = new App(canvasWidth, canvasHeight, { isPerspective: true, useOrbitControls: true });
 
 app.currentScene = new THREE.Scene();
 
@@ -25,17 +25,21 @@ const uniforms = {
     u_time: { value: 0.0 },
     u_mouse: { value: { x: 0.0, y: 0.0 } },
     u_resolution: { value: { x: canvasWidth, y: canvasHeight } },
-    u_color: { value: new THREE.Color(0xFF0000) }
+    u_color: { value: new THREE.Color(0xFF0000) },
+    u_radius: { value: 20.0 }
 };
 
 // geometry
-const geometry = new THREE.PlaneGeometry(2, 2);
+// const geometry = new THREE.PlaneGeometry(2, 2);
+
+const geometry = new THREE.BoxGeometry(30, 30, 30, 10, 10, 10);
 
 const material = new THREE.ShaderMaterial({
     glslVersion: THREE.GLSL3,
     uniforms: uniforms,
     vertexShader: vshader,
-    fragmentShader: fshader
+    fragmentShader: fshader,
+    wireframe: true
 });
 
 const plane = new THREE.Mesh(geometry, material);

@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
 import EventEmitter from 'events';
 
 export default class App {
@@ -12,7 +14,7 @@ export default class App {
         this._currentScene = value;
     }
 
-    constructor(canvasWidth = 800, canvasHeight = 600) {
+    constructor(canvasWidth = 800, canvasHeight = 600, cameraParams = {}) {
 
         this._canvasWidth = canvasWidth;
         this._canvasHeight = canvasHeight;
@@ -23,8 +25,23 @@ export default class App {
         
         this._renderer.setAnimationLoop( this.update.bind(this) );
 
-        this._camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
-        this._camera.position.z = 1;
+        if (cameraParams.isPerspective)
+        {
+            this._camera = new THREE.PerspectiveCamera(45, 
+                canvasWidth / canvasHeight, 1, 1000);
+
+            this._camera.position.z = 100;
+
+            if (cameraParams.useOrbitControls)
+            {
+                this._controls = new OrbitControls(this._camera, this._renderer.domElement);
+            }
+        }
+        else
+        {
+            this._camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+            this._camera.position.z = 1;
+        }
 
         this.events = new EventEmitter();
 
