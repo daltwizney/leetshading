@@ -6,6 +6,10 @@ import EventEmitter from 'events';
 
 export default class App {
 
+    get clock() {
+        return this._clock;
+    }
+
     get currentScene() {
         return this._currentScene;
     }
@@ -18,6 +22,8 @@ export default class App {
 
         this._canvasWidth = canvasWidth;
         this._canvasHeight = canvasHeight;
+
+        this._clock = new THREE.Clock();
 
         this._renderer = new THREE.WebGLRenderer();
         this._renderer.setSize( canvasWidth, canvasHeight );
@@ -45,7 +51,8 @@ export default class App {
 
         this.events = new EventEmitter();
 
-        this._currentScene = null;
+        this._currentScene = new THREE.Scene();
+        this._currentScene.background = new THREE.Color(0x2b0057);
 
         // setup input events
         if ('ontouchstart' in window) {

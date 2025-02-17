@@ -7,29 +7,32 @@ import fshader from './src/shaders/box_sphere.frag?raw';
 
 import textureUrl from './assets/textures/kollie-logo-v2.png';
 
-// scene, camera, renderer
+/** app */
 const canvasWidth = 600;
 const canvasHeight = 600;
 
-const app = new App(canvasWidth, canvasHeight, { isPerspective: true, useOrbitControls: true });
+const app = new App(canvasWidth, canvasHeight, 
+    { isPerspective: true, useOrbitControls: true });
 
-app.currentScene = new THREE.Scene();
+/** uniforms */
+const uniforms = THREE.UniformsUtils.merge( [
+  THREE.UniformsLib[ "common" ],
+  THREE.UniformsLib[ "lights" ]
+]); 
 
-const clock = new THREE.Clock();
+uniforms.u_tex = { value: new THREE.TextureLoader().load(textureUrl) };
+uniforms.u_time = { value: 0.0 };
+uniforms.u_mouse = { value: { x: 0.0, y: 0.0 } };
+uniforms.u_resolution = { value: { x: canvasWidth, y: canvasHeight } };
+uniforms.u_color = { value: new THREE.Color(0xFF0000) };
+uniforms.u_radius = { value: 20.0 };
 
-// uniforms
-const uniforms = {
-    u_tex: {
-        value: new THREE.TextureLoader().load(textureUrl)
-    },
-    u_time: { value: 0.0 },
-    u_mouse: { value: { x: 0.0, y: 0.0 } },
-    u_resolution: { value: { x: canvasWidth, y: canvasHeight } },
-    u_color: { value: new THREE.Color(0xFF0000) },
-    u_radius: { value: 20.0 }
-};
+/** lighting */
 
-// geometry
+// TODO: add lights and update lighting chunks in shaders
+
+/** geometry */
+
 // const geometry = new THREE.PlaneGeometry(2, 2);
 
 const geometry = new THREE.BoxGeometry(30, 30, 30, 10, 10, 10);
@@ -46,7 +49,7 @@ const plane = new THREE.Mesh(geometry, material);
 
 app.currentScene.add(plane);
 
-// event-handlers
+/** event-handlers */
 app.events.on('mouseMove', (e) => {
 
     uniforms.u_mouse.value.x = (e.touches) ? 
@@ -56,8 +59,8 @@ app.events.on('mouseMove', (e) => {
         e.touches[0].clientY : e.clientY;
 });
 
-// render loop
+/** render loop */
 app.events.on('update', () => {
 
-    uniforms.u_time.value = clock.getElapsedTime();
+    uniforms.u_time.value = app.clock.getElapsedTime();
 });
